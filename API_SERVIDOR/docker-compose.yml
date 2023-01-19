@@ -1,0 +1,65 @@
+# UNIVERSIDAD POLITENICA SALESIANA 
+version: '3.1'
+
+services:
+
+  apiserv1:
+    container_name: servidor1
+    image: apiserv
+    ports:
+      - "3001:3001"
+    networks:
+      - red1
+    links: 
+      - dbjc
+    build: .
+    environment:
+      - PORT=3001
+
+  
+  apiserv2:
+    container_name: servidor2
+    image: apiserv
+    ports:
+      - "3002:3002"
+    networks:
+      - red1
+    links: 
+      - dbjc
+    build: .
+    environment:
+      - PORT=3002
+
+  
+
+  apiserv3:
+    container_name: servidor3
+    image: apiserv
+    ports:
+      - "3003:3003"
+    networks:
+      - red1
+    links: 
+      - dbjc
+    build: .
+    environment:
+      - PORT=3003
+
+
+  dbjc:
+    container_name: base
+    image: mongo:4.0.4
+    restart: always
+    networks:
+      - red1
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+  
+
+networks:
+  red1:
+    name: red1
+    external: true
+
