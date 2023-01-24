@@ -19,33 +19,88 @@
 
   <div class="container">
     <div class="jumbotron">
-      <h1>El servidor esta funcionando JABP CGRL</h1>
+      <h1>Bienvenido al inventario de la tienda prueba 204</h1>
     </div>
+    <div class="input-group">
+      <div class="form-outline">
+        <input type="search" id="producto" class="form-control" placeholder="Producto" />
+      </div>
+      <button type="button" id="insert" class="btn btn-primary">
+        Ingresar Producto
+      </button>
+    </div>
+    <table align="center" class="table mt-3" id="table" border="1">
+    </table>
   </div>
 
   <br><br>
 
-  <table align="center" id="table" border="1">
-  </table>
+
   <script>
-    $(document).ready(function () {
+    $("#insert").click(function () {
+      $.ajax({
+        type: "POST",
+        url: 'http://localhost:3001/insertDatos',
+        headers: {'Access-Control-Allow-Headers': '*'},
+        data: { name: $('#producto').val() },
+        success: function (response) {
+          alert("Producto insertado con exito");
+        },
+        error: function (error) {
+          console.log(e.message);
+        }
+      });
       $.ajax({
         type: "GET",
-        url: 'http://localhost:3000/datos',
+        url: 'http://localhost:3001/datos',
+        headers: {'Access-Control-Allow-Headers': '*'},
         success: function (response) {
           var list = response;
 
+          list.push({ acciones: null });
           var cols = Headers(list, '#table');
-          for (var i = 0; i < list.length; i++) {
+          for (var i = 0; i < list.length - 1; i++) {
             var row = $('<tr/>');
-            for (var colIndex = 0; colIndex < cols.length; colIndex++) {
+            for (var colIndex = 0; colIndex < cols.length - 1; colIndex++) {
               var val = list[i][cols[colIndex]];
-
+              console.log(val)
               // If there is any key, which is matching
               // with the column name
               if (val == null) val = "";
               row.append($('<td/>').html(val));
             }
+            row.append($('<td/>').html('<button type="button" class="btn btn-danger btn-sm" id="delete">Eliminar</button>'));
+
+            // Adding each row to the table
+            $('#table').append(row);
+          }
+        },
+        error: function (error) {
+          console.log(e.message);
+        }
+      });
+    });
+    $(document).ready(function () {
+      $.ajax({
+        type: "GET",
+        url: 'http://localhost:3001/datos',
+        headers: {'Access-Control-Allow-Headers': '*'},
+        success: function (response) {
+          var list = response;
+
+          list.push({ acciones: null });
+          var cols = Headers(list, '#table');
+          for (var i = 0; i < list.length - 1; i++) {
+            var row = $('<tr/>');
+            for (var colIndex = 0; colIndex < cols.length - 1; colIndex++) {
+              var val = list[i][cols[colIndex]];
+              console.log(val)
+              // If there is any key, which is matching
+              // with the column name
+              if (val == null) val = "";
+              row.append($('<td/>').html(val));
+            }
+            row.append($('<td/>').html('<button type="button" class="btn btn-danger btn-sm" id="delete">Eliminar</button>'));
 
             // Adding each row to the table
             $('#table').append(row);
