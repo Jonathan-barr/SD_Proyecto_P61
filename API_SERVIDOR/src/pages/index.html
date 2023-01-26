@@ -19,7 +19,8 @@
 
   <div class="container">
     <div class="jumbotron">
-      <h1>Bienvenido al inventario de la tienda prueba 204</h1>
+
+      <h1 id ="bienv">Bienvenido al inventario de la tienda prueba 204</h1>
     </div>
     <div class="input-group">
       <div class="form-outline">
@@ -37,10 +38,11 @@
 
 
   <script>
+
     $("#insert").click(function () {
       $.ajax({
         type: "POST",
-        url: 'http://localhost:3001/insertDatos',
+        url: `${window.location.href}insertDatos`,
         headers: {'Access-Control-Allow-Headers': '*'},
         data: { name: $('#producto').val() },
         success: function (response) {
@@ -52,7 +54,7 @@
       });
       $.ajax({
         type: "GET",
-        url: 'http://localhost:3001/datos',
+        url: `${window.location.href}datos`,
         headers: {'Access-Control-Allow-Headers': '*'},
         success: function (response) {
           var list = response;
@@ -81,9 +83,15 @@
       });
     });
     $(document).ready(function () {
+
+      const text = window.location.href
+      var b = $("#bienv");
+      var c = b.children();
+      b.text(`Bienvenido al inventario de la tienda (  Balanceador de Carga)`);
+      
       $.ajax({
         type: "GET",
-        url: 'http://localhost:3001/datos',
+        url: `${window.location.href}datos`,
         headers: {'Access-Control-Allow-Headers': '*'},
         success: function (response) {
           var list = response;
@@ -136,6 +144,8 @@
       return columns;
     }      
   </script>
+
+
 </body>
 
 </html>
